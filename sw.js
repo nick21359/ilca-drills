@@ -1,7 +1,8 @@
 /* Картотека упражнений ILCA 6 — service worker
    При каждом обновлении содержимого меняй CACHE_VERSION,
    иначе у тренеров останется старая версия. */
-const CACHE_VERSION = "ilca6-drills-v1.2.0";
+const CACHE_VERSION = "ilca6-drills-v1.3.0";
+const BUILD_DATE = "2026-09-02";
 
 const ASSETS = [
   "./",
@@ -49,5 +50,10 @@ self.addEventListener("fetch", e => {
 });
 
 self.addEventListener("message", e => {
-  if (e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
+  if (!e.data) return;
+  if (e.data.type === "SKIP_WAITING") self.skipWaiting();
+  /* Подвал страницы спрашивает версию отсюда, чтобы цифры не расходились. */
+  if (e.data.type === "GET_VERSION" && e.ports && e.ports[0]) {
+    e.ports[0].postMessage({ version: CACHE_VERSION, build: BUILD_DATE });
+  }
 });
