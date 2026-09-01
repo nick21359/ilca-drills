@@ -1,7 +1,7 @@
 /* Картотека упражнений ILCA 6 — service worker
    При каждом обновлении содержимого меняй CACHE_VERSION,
    иначе у тренеров останется старая версия. */
-const CACHE_VERSION = "ilca6-drills-v1.1.0";
+const CACHE_VERSION = "ilca6-drills-v1.2.0";
 
 const ASSETS = [
   "./",
