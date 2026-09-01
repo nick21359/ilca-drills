@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Картотека упражнений — ILCA 6</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F2A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{
+  --ink:#0B1F2A;
+  --ink-2:#3D5561;
+  --slate:#DFE4E3;
+  --paper:#F4F5F2;
+  --card:#FFFFFF;
+  --teal:#14514E;
+  --buoy:#F0A202;
+  --line:#C6CFCE;
+  --shadow:0 1px 0 rgba(11,31,42,.06), 0 6px 18px -12px rgba(11,31,42,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--slate);
+  color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px 64px}
+
+/* ---- шапка ---- */
+header{
+  background:var(--ink);
+  color:var(--paper);
+  padding:22px 0 18px;
+  margin-bottom:14px;
+  border-bottom:4px solid var(--buoy);
+}
+header .wrap{padding-bottom:0}
+.kicker{
+  font:600 11px/1 -apple-system,"Segoe UI",Roboto,sans-serif;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--buoy);
+  margin-bottom:8px;
+}
+h1{
+  margin:0 0 6px;
+  font:700 clamp(24px,5vw,36px)/1.05 "Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  letter-spacing:.01em;text-transform:uppercase;
+}
+.sub{margin:0;color:#9FB3BC;font-size:13px;max-width:56ch}
+
+/* ---- фильтры ---- */
+.filters{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 12px 6px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.frow{margin-bottom:10px}
+.flabel{
+  font:600 10px/1 -apple-system,sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-2);margin-bottom:6px;
+}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer;
+  transition:background .12s,border-color .12s,color .12s;
+}
+.chip:hover{border-color:var(--teal)}
+.chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.chip:focus-visible{outline:2px solid var(--buoy);outline-offset:2px}
+
+.bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:6px 2px 8px;border-top:1px dashed var(--line);
+  font-size:13px;color:var(--ink-2);
+}
+.reset{
+  background:none;border:none;color:var(--teal);font-size:13px;cursor:pointer;
+  text-decoration:underline;padding:4px;
+}
+
+/* ---- сетка карточек ---- */
+.grid{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
+}
+.card.auth{border-left:4px solid var(--buoy)}
+.chead{padding:14px 14px 12px;cursor:pointer;text-align:left;background:none;border:none;width:100%;font:inherit;color:inherit}
+.chead:focus-visible{outline:2px solid var(--buoy);outline-offset:-2px}
+.num{
+  display:inline-block;font:700 11px/1 "Arial Narrow",sans-serif;letter-spacing:.12em;
+  color:#fff;background:var(--ink);border-radius:3px;padding:4px 7px;margin-bottom:8px;
+}
+.card.auth .num{background:var(--buoy);color:var(--ink)}
+.cname{
+  margin:0 0 4px;font:700 19px/1.15 "Arial Narrow","Roboto Condensed",Impact,sans-serif;
+  text-transform:uppercase;letter-spacing:.01em;
+}
+.ceng{margin:0 0 10px;font-size:12px;color:var(--ink-2);font-style:italic}
+.cgoal{margin:0 0 12px;font-size:14px;color:var(--ink-2)}
+
+/* шкала ветра — фирменный элемент */
+.wind{margin:0 0 10px}
+.wscale{display:flex;gap:2px;margin-bottom:5px}
+.wseg{height:9px;flex:1;background:var(--slate);border-radius:1px}
+.wseg.on{background:var(--teal)}
+.wseg.edge{background:#8FB3B0}
+.wmeta{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--ink-2)}
+.wmeta b{color:var(--ink);font-weight:600}
+.wseg.d{background:var(--slate)}
+.wseg.d.on{background:var(--buoy)}
+
+.facts{display:flex;flex-wrap:wrap;gap:5px}
+.fact{
+  font-size:11.5px;background:var(--paper);border:1px solid var(--line);
+  border-radius:4px;padding:3px 7px;color:var(--ink-2);
+}
+.more{
+  display:block;text-align:center;font-size:12px;color:var(--teal);
+  padding:8px;border-top:1px dashed var(--line);margin-top:12px;
+}
+
+/* ---- раскрытая часть ---- */
+.body{display:none;padding:0 14px 16px;border-top:1px solid var(--line)}
+.card.open .body{display:block}
+.card.open .more{display:none}
+.sec{margin-top:14px}
+.sec h4{
+  margin:0 0 6px;font:600 10px/1 -apple-system,sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--teal);
+}
+.sec p{margin:0;font-size:14px}
+.sec ul,.sec ol{margin:0;padding-left:18px;font-size:14px}
+.sec li{margin-bottom:4px}
+.brief{
+  background:var(--paper);border-left:3px solid var(--buoy);
+  padding:10px 12px;font-size:14px;font-style:italic;margin:0;
+}
+.two{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:520px){.two{grid-template-columns:1fr 1fr}}
+.mini{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:9px 11px}
+.mini h4{margin:0 0 4px;font:600 10px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.mini p{margin:0;font-size:13.5px}
+.ws{background:var(--paper);border-left:3px solid var(--teal);padding:10px 12px;font-size:13.5px}
+.warn{background:#FFF6E0;border:1px solid var(--buoy);border-radius:6px;padding:9px 11px;font-size:13.5px}
+.src{margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);font-size:12px;color:var(--ink-2)}
+.close{
+  margin-top:14px;width:100%;background:var(--ink);color:#fff;border:none;
+  border-radius:6px;padding:10px;font-size:13px;cursor:pointer;
+}
+.empty{
+  background:var(--paper);border:1px dashed var(--line);border-radius:10px;
+  padding:28px 18px;text-align:center;color:var(--ink-2);font-size:14px;
+}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:6px}
+
+/* ---- плашка обновления ---- */
+#upd{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:99;
+  background:var(--ink);color:var(--paper);border-radius:10px;
+  padding:12px 14px;display:none;align-items:center;gap:12px;
+  box-shadow:0 8px 24px -8px rgba(11,31,42,.6);font-size:14px;
+}
+#upd.show{display:flex}
+#upd span{flex:1}
+#upd button{
+  background:var(--buoy);color:var(--ink);border:none;border-radius:6px;
+  padding:9px 14px;font:600 14px/1 inherit;cursor:pointer;min-height:44px;
+}
+/* ---- подвал ---- */
+.foot{
+  margin-top:28px;padding-top:14px;border-top:1px dashed var(--line);
+  font-size:11.5px;color:var(--ink-2);text-align:center;
+}
+/* ---- печать ---- */
+@media print{
+  html,body{background:#fff;color:#000}
+  header,.filters,.bar,.more,.close,#upd,.foot{display:none!important}
+  .wrap{max-width:none;padding:0}
+  .grid{display:block}
+  .card{
+    border:1px solid #000;box-shadow:none;background:#fff;
+    break-inside:avoid;page-break-inside:avoid;margin-bottom:10mm;
+  }
+  .card:not(.open){display:none!important}
+  .card .body{display:block!important;max-height:none!important}
+  .num{background:#000!important;color:#fff!important}
+  .card.auth .num{background:#666!important;color:#fff!important}
+  .wseg{border:1px solid #000;background:#fff!important}
+  .wseg.on{background:#000!important}
+  .ws,.warn,.fact,.brief{background:#fff!important;border-color:#000!important}
+  a{text-decoration:none;color:#000}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">ILCA 6 · Laser Radial · одиночки</div>
+    <h1>Картотека упражнений</h1>
+    <p class="sub">Четыре блока: управление лодкой, чувство лодки и контрольные концы, старты и тактика, работа на волне и сильном ветре. Отфильтруй под группу, которая сегодня на воде, и раскрой карточку. Время в карточке — минимум, ниже которого упражнение не работает, и полный формат: тренировка собирается из карточек под то время, которое есть. Все дистанции в корпусах: 1 корпус ≈ 4,2 м.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="filters">
+    <div class="frow">
+      <div class="flabel">Кто на воде</div>
+      <div class="chips" data-group="level"></div>
+    </div>
+    <div class="frow">
+      <div class="flabel">Задача</div>
+      <div class="chips" data-group="task"></div>
+    </div>
+    <div class="frow">
+      <div class="flabel">Ветер</div>
+      <div class="chips" data-group="wind"></div>
+    </div>
+    <div class="frow">
+      <div class="flabel">Обеспечение</div>
+      <div class="chips" data-group="gear"></div>
+    </div>
+    <div class="bar">
+      <span id="count"></span>
+      <button class="reset" id="reset">Сбросить фильтры</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="drills.js"></script>
+<script>
+
+const FILTERS = {
+  level:{label:"Кто на воде", opts:[["nov","Новички"],["mix","Смешанная"],["race","Гонщики"]]},
+  task:{label:"Задача", opts:[["turns","Повороты"],["marks","Огибания"],["speed","Разгон и торможение"],["heel","Крен и корпус"],["astern","Задний ход"],["hold","Удержание позиции"],["load","Работа под нагрузкой"],["tactics","Позиция в потоке"],["capsize","Оверкиль"]]},
+  wind:{label:"Ветер", opts:[["w02","0–2 м/с"],["w25","2–5 м/с"],["w57","5–7 м/с"],["w710","7–10 м/с"]]},
+  gear:{label:"Обеспечение", opts:[["nomarks","Без знаков"],["few","До 2 знаков"],["small","От 4 лодок"],["big","От 10 лодок"]]}
+};
+
+const state = {level:new Set(),task:new Set(),wind:new Set(),gear:new Set()};
+
+function windMatch(d,k){
+  const R={w02:[0,2], w25:[2,5], w57:[5,7], w710:[7,10]};
+  const r=R[k];
+  return d.wind[1]>r[0] && d.wind[0]<r[1];
+}
+function gearMatch(d,k){
+  if(k==="nomarks") return d.marksN===0;
+  if(k==="few") return d.marksN<=2;
+  if(k==="small") return d.boats<=4;
+  if(k==="big") return d.big===true;
+}
+function matches(d){
+  const s=state;
+  if(s.level.size && ![...s.level].some(k=>d.level.includes(k))) return false;
+  if(s.task.size && ![...s.task].some(k=>d.task.includes(k))) return false;
+  if(s.wind.size && ![...s.wind].some(k=>windMatch(d,k))) return false;
+  if(s.gear.size && ![...s.gear].some(k=>gearMatch(d,k))) return false;
+  return true;
+}
+
+/* шкала ветра 0..10 м/с */
+function windBar(d){
+  let segs="";
+  for(let i=0;i<10;i++){
+    const lo=i, hi=i+1;
+    const on = hi>d.wind[0] && lo<d.wind[1];
+    segs+=`<div class="wseg ${on?"on":""}"></div>`;
+  }
+  return `<div class="wind">
+    <div class="wscale">${segs}</div>
+    <div class="wmeta"><span><b>${d.wind[0]}–${d.wind[1]} м/с</b></span><span>${d.sign}</span></div>
+  </div>`;
+}
+const DIFF=["","базовое","простое","среднее","сложное","очень сложное"];
+function diffBar(d){
+  let segs="";
+  for(let i=1;i<=5;i++) segs+=`<div class="wseg d ${i<=d.diff?"on":""}"></div>`;
+  return `<div class="wind">
+    <div class="wscale">${segs}</div>
+    <div class="wmeta"><span><b>Сложность ${d.diff} из 5</b></span><span>${DIFF[d.diff]}</span></div>
+  </div>`;
+}
+const li = a => a.map(x=>`<li>${x}</li>`).join("");
+
+function cardHTML(d){
+  return `<article class="card ${d.auth?"auth":""}" data-n="${d.n}">
+    <button class="chead" type="button">
+      <span class="num">${d.n}${d.tag?" · "+d.tag:""}</span>
+      <h3 class="cname">${d.name}</h3>
+      <p class="ceng">${d.eng}</p>
+      <p class="cgoal">${d.goal}</p>
+      ${windBar(d)}
+      ${diffBar(d)}
+      <div class="facts">
+        <span class="fact">поле ${d.field}</span>
+        <span class="fact">от ${d.boats} лодок</span>
+        <span class="fact">${d.marksN===0?"без знаков":"знаков: "+d.marksN}</span>
+        <span class="fact">${d.timing}</span>
+      </div>
+      <span class="more">Раскрыть карточку ▾</span>
+    </button>
+    <div class="body">
+      ${d.warn?`<div class="sec"><div class="warn">⚠ ${d.warn}</div></div>`:""}
+      <div class="sec"><h4>Схема постановки</h4><p>${d.setup}</p></div>
+      <div class="sec"><h4>Ход упражнения</h4><ol>${li(d.steps)}</ol></div>
+      <div class="sec"><h4>Брифинг</h4><p class="brief">«${d.brief}»</p></div>
+      <div class="sec"><h4>Критерии успеха</h4><ul>${li(d.success)}</ul></div>
+      <div class="sec"><h4>Ошибки — на что смотреть с катера</h4><ul>${li(d.errors)}</ul></div>
+      <div class="sec"><h4>Акватория: глубина ${d.depth}</h4><ul>${li(d.adapt)}</ul></div>
+      <div class="sec"><h4>Ветер на этой акватории</h4><p class="ws">${d.ws}</p></div>
+      <div class="sec two">
+        <div class="mini"><h4>Проще</h4><p>${d.easier}</p></div>
+        <div class="mini"><h4>Сложнее</h4><p>${d.harder}</p></div>
+        <div class="mini"><h4>4 и 15 лодок</h4><p>${d.scale}</p></div>
+        <div class="mini"><h4>План Б</h4><p>${d.planB}</p></div>
+      </div>
+      <div class="sec"><h4>Дебрифинг</h4><ul>${li(d.debrief)}</ul></div>
+      <div class="src">Источник: ${d.src}</div>
+      <button class="close" type="button">Свернуть</button>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const list=DRILLS.filter(matches);
+  const grid=document.getElementById("grid");
+  grid.innerHTML = list.length
+    ? list.map(cardHTML).join("")
+    : `<div class="empty" style="grid-column:1/-1"><b>Под эти условия ничего не подходит</b>Сними один фильтр — чаще всего мешает связка «ветер» и «обеспечение».</div>`;
+  document.getElementById("count").textContent =
+    list.length ? `Подходит упражнений: ${list.length} из ${DRILLS.length}` : "";
+  grid.querySelectorAll(".chead").forEach(b=>{
+    b.addEventListener("click",()=>b.closest(".card").classList.toggle("open"));
+  });
+  grid.querySelectorAll(".close").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const c=b.closest(".card"); c.classList.remove("open");
+      c.scrollIntoView({block:"nearest"});
+    });
+  });
+}
+
+function buildFilters(){
+  for(const key in FILTERS){
+    const box=document.querySelector(`.chips[data-group="${key}"]`);
+    FILTERS[key].opts.forEach(([val,label])=>{
+      const b=document.createElement("button");
+      b.className="chip"; b.type="button"; b.textContent=label;
+      b.setAttribute("aria-pressed","false");
+      b.addEventListener("click",()=>{
+        const on=state[key].has(val);
+        on?state[key].delete(val):state[key].add(val);
+        b.setAttribute("aria-pressed",String(!on));
+        render();
+      });
+      box.appendChild(b);
+    });
+  }
+}
+document.getElementById("reset").addEventListener("click",()=>{
+  for(const k in state) state[k].clear();
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  render();
+});
+
+buildFilters();
+render();
+
+/* ---- PWA: регистрация и обновление ---- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js",{scope:"./"}).then(reg=>{
+      function offer(w){
+        const bar=document.getElementById("upd");
+        bar.classList.add("show");
+        document.getElementById("updBtn").onclick=()=>{
+          w.postMessage({type:"SKIP_WAITING"});
+        };
+      }
+      if(reg.waiting) offer(reg.waiting);
+      reg.addEventListener("updatefound",()=>{
+        const nw=reg.installing;
+        if(!nw) return;
+        nw.addEventListener("statechange",()=>{
+          if(nw.state==="installed" && navigator.serviceWorker.controller) offer(nw);
+        });
+      });
+    }).catch(()=>{});
+    let reloading=false;
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{
+      if(reloading) return;
+      reloading=true;
+      location.reload();
+    });
+  });
+}
+</script>
+
+<div id="upd"><span>Доступна новая версия картотеки</span><button type="button" id="updBtn">Обновить</button></div>
+<div class="wrap"><div class="foot">Картотека упражнений ILCA 6 · версия <b id="vNum">1.0.0</b> · сборка <span id="vDate">2026-09-01</span></div></div>
+</body>
+</html>
