@@ -1,7 +1,7 @@
 /* Картотека упражнений ILCA 6 — service worker
    При каждом обновлении содержимого меняй CACHE_VERSION,
    иначе у тренеров останется старая версия. */
-const CACHE_VERSION = "ilca6-drills-v1.5.0";
+const CACHE_VERSION = "ilca6-drills-v1.8.0";
 const BUILD_DATE = "2026-09-02";
 
 const ASSETS = [
@@ -53,7 +53,9 @@ function networkFirst(req) {
       done = true;
       fromCache(req).then(resolve);
     }, NET_TIMEOUT);
-    fetch(req).then(res => {
+    /* cache: "reload" — идём на сервер мимо HTTP-кеша браузера,
+       иначе GitHub Pages может десять минут отдавать старый файл. */
+    fetch(new Request(req.url, { cache: "reload" })).then(res => {
       if (res && res.status === 200 && res.type === "basic") {
         const copy = res.clone();
         caches.open(CACHE_VERSION).then(c => c.put(req, copy));
