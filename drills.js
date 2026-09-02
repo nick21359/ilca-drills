@@ -1,3 +1,7 @@
+/* Версия данных. Меняй при каждой правке картотеки: подвал берёт цифры отсюда. */
+const DATA_VERSION = "1.5.0";
+const DATA_DATE = "2026-09-02";
+
 /* Схемы постановки для картотеки ILCA 6.
    Вход — поле map карточки, выход — строка SVG.
    Координаты в корпусах: x вправо, y по ветру (вниз). Ветер всегда сверху.
@@ -1321,6 +1325,13 @@ src:"RYA, Olive &amp; Hillary, «Race Training Exercises», 2005 — Dinghy Park
 
   /* Подвал: версию и дату берём у service worker, чтобы они не расходились с кешем. */
   function stampVersion(num, build) {
+    /* Сначала по идентификаторам из разметки подвала. */
+    var el = document.getElementById("vNum");
+    if (el && num) el.textContent = num;
+    var ed = document.getElementById("vDate");
+    if (ed && build) ed.textContent = build;
+    if (el || ed) return;
+    /* Запасной путь: ищем числа рядом со словами «версия» и «сборка». */
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false), n;
     while ((n = w.nextNode())) {
       var t = n.nodeValue;
@@ -1332,21 +1343,6 @@ src:"RYA, Olive &amp; Hillary, «Race Training Exercises», 2005 — Dinghy Park
     }
   }
 
-  function askVersion() {
-    if (!navigator.serviceWorker || !window.MessageChannel) return;
-    navigator.serviceWorker.ready.then(function (reg) {
-      var sw = navigator.serviceWorker.controller || (reg && reg.active);
-      if (!sw) return;
-      var ch = new MessageChannel();
-      ch.port1.onmessage = function (ev) {
-        var d = ev.data || {};
-        if (!d.version) return;
-        stampVersion(String(d.version).replace(/^.*?v/, ""), d.build);
-      };
-      try { sw.postMessage({ type: "GET_VERSION" }, [ch.port2]); } catch (e) {}
-    }).catch(function () {});
-  }
-
   function install() {
     var grid = document.getElementById("grid");
     if (!grid) return;
@@ -1356,7 +1352,7 @@ src:"RYA, Olive &amp; Hillary, «Race Training Exercises», 2005 — Dinghy Park
     }
     injectMaps();
     new MutationObserver(injectMaps).observe(grid, { childList: true });
-    askVersion();
+    stampVersion(DATA_VERSION, DATA_DATE);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install);
